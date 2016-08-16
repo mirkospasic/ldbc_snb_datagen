@@ -45,6 +45,7 @@ public class Comment extends Message {
 
     private long postId_;
     private long replyOf_;
+    private String gif_;
 
     public Comment() {
         super();
@@ -65,12 +66,14 @@ public class Comment extends Message {
                    IP ipAddress,
                    int browserId,
                    long postId,
-                   long replyOf
+                   long replyOf,
+		   String gif
     ) {
 
         super(commentId, creationDate, author, forumId, content, tags, ipAddress, browserId);
         postId_ = postId;
         replyOf_ = replyOf;
+	gif_ = gif;
     }
 
     public void initialize(long commentId,
@@ -82,10 +85,12 @@ public class Comment extends Message {
                    IP ipAddress,
                    int browserId,
                    long postId,
-                   long replyOf) {
+		   long replyOf,
+		   String gif) {
         super.initialize(commentId, creationDate, author, forumId, content, tags, ipAddress, browserId);
         postId_ = postId;
         replyOf_ = replyOf;
+	gif_ = gif;
     }
 
     public long postId() {
@@ -102,6 +107,14 @@ public class Comment extends Message {
 
     public void replyOf( long id ) {
 	    replyOf_ = id;
+    }
+
+    public String gif() {
+	    return gif_;
+    }
+
+    public void gif( String gif ) {
+	    gif_ = gif;
     }
 
 }

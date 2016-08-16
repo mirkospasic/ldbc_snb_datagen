@@ -22,6 +22,7 @@ import java.util.TreeSet;
  */
 public class CommentGenerator {
 	private String[] shortComments_ = {"ok", "good", "great", "cool", "thx", "fine", "LOL", "roflol", "no way!", "I see", "right", "yes", "no", "duh", "thanks", "maybe"};
+	private String[] gifs_ = {"heart.gif", "love.gif", "question.gif", "like.gif", "ily.gif", "crazy.gif", "imy.gif", "kiss.gif", "sick.gif", "sad.gif", "happy.gif", "lol.gif"};
 	private TextGenerator generator;
 	private LikeGenerator likeGenerator_;
     private Comment comment_;
@@ -55,6 +56,7 @@ public class CommentGenerator {
 			ForumMembership member = validMemberships.get(randomFarm.get(RandomGeneratorFarm.Aspect.MEMBERSHIP_INDEX).nextInt(validMemberships.size()));
 			TreeSet<Integer> tags = new TreeSet<Integer>();
 			String content = "";
+			String gif = "";
 			
 
 			boolean isShort = false;
@@ -77,9 +79,16 @@ public class CommentGenerator {
 				content = this.generator.generateText(member.person(), tags,prop);
 			} else {
 				isShort = true;
-				int index = randomFarm.get(RandomGeneratorFarm.Aspect.TEXT_SIZE).nextInt(shortComments_.length);
-				content = shortComments_[index];
+				if (randomFarm.get(RandomGeneratorFarm.Aspect.COMMENT_ISGIF).nextDouble() > 0.8) {
+				    int index = randomFarm.get(RandomGeneratorFarm.Aspect.TEXT_SIZE).nextInt(shortComments_.length);
+				    content = shortComments_[index];
+				}
+				else {
+				    int index = randomFarm.get(RandomGeneratorFarm.Aspect.COMMENT_GIF).nextInt(gifs_.length);
+				    gif = gifs_[index];
+				}
 			}
+
 			
 			long creationDate = Dictionaries.dates.powerlawCommDateDay(randomFarm.get(RandomGeneratorFarm.Aspect.DATE),replyTo.creationDate()+DatagenParams.deltaTime);
 			/*if( creationDate <= Dictionaries.dates.getEndDateTime() )*/ {
@@ -92,7 +101,10 @@ public class CommentGenerator {
 					Dictionaries.ips.getIP(randomFarm.get(RandomGeneratorFarm.Aspect.IP), randomFarm.get(RandomGeneratorFarm.Aspect.DIFF_IP), randomFarm.get(RandomGeneratorFarm.Aspect.DIFF_IP_FOR_TRAVELER), member.person().ipAddress(), creationDate),
 					Dictionaries.browsers.getPostBrowserId(randomFarm.get(RandomGeneratorFarm.Aspect.DIFF_BROWSER), randomFarm.get(RandomGeneratorFarm.Aspect.BROWSER), member.person().browserId()),
 					post.messageId(),
-					replyTo.messageId());
+					replyTo.messageId(),
+					gif);
+				if (randomFarm.get(RandomGeneratorFarm.Aspect.COMMENT_COUNTRY).nextDouble() > 0.02)
+				    comment.countryKnown(false);
 				if(!isShort) replyCandidates.add(new Comment(comment));
 				exporter.export(comment);
 				if( comment.content().length() > 10 && randomFarm.get(RandomGeneratorFarm.Aspect.NUM_LIKE).nextDouble() <= 0.1 ) {

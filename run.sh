@@ -1,6 +1,6 @@
 #!/bin/bash
-DEFAULT_HADOOP_HOME=/home/user/hadoop-2.6.0 #change to your hadoop folder
-DEFAULT_LDBC_SNB_DATAGEN_HOME=/home/user/ldbc_snb_datagen #change to your ldbc_socialnet_dbgen folder
+DEFAULT_HADOOP_HOME=/home/spasic/hadoop-2.6.0 #change to your hadoop folder
+DEFAULT_LDBC_SNB_DATAGEN_HOME=/home/spasic/work/ldbc/ldbc_snb_datagen_new #change to your ldbc_socialnet_dbgen folder
 
 # allow overriding configuration from outside via environment variables
 # i.e. you can do

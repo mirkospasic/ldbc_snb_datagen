@@ -103,6 +103,7 @@ public class CSVMergeForeignPersonActivitySerializer extends PersonActivitySeria
         arguments.add("locationIP");
         arguments.add("browserUsed");
         arguments.add("content");
+	arguments.add("gifFile");
         arguments.add("length");
         arguments.add("creator");
         arguments.add("place");
@@ -157,7 +158,10 @@ public class CSVMergeForeignPersonActivitySerializer extends PersonActivitySeria
         arguments.add(Integer.toString(post.content().length()));
         arguments.add(Long.toString(post.author().accountId()));
         arguments.add(Long.toString(post.forumId()));
-        arguments.add(Integer.toString(post.countryId()));
+	if (post.countryKnown())
+	    arguments.add(Integer.toString(post.countryId()));
+	else
+	    arguments.add("");
         writers[FileNames.POST.ordinal()].writeEntry(arguments);
         arguments.clear();
 
@@ -175,9 +179,13 @@ public class CSVMergeForeignPersonActivitySerializer extends PersonActivitySeria
         arguments.add(comment.ipAddress().toString());
         arguments.add(Dictionaries.browsers.getName(comment.browserId()));
         arguments.add(comment.content());
+	arguments.add(comment.gif());
         arguments.add(Integer.toString(comment.content().length()));
         arguments.add(Long.toString(comment.author().accountId()));
-        arguments.add(Integer.toString(comment.countryId()));
+	if (comment.countryKnown())
+	    arguments.add(Integer.toString(comment.countryId()));
+	else
+	    arguments.add("");
         if (comment.replyOf() == comment.postId()) {
             arguments.add(Long.toString(comment.postId()));
             arguments.add(empty);
@@ -208,7 +216,10 @@ public class CSVMergeForeignPersonActivitySerializer extends PersonActivitySeria
         arguments.add(Integer.toString(0));
         arguments.add(Long.toString(photo.author().accountId()));
         arguments.add(Long.toString(photo.forumId()));
-        arguments.add(Integer.toString(photo.countryId()));
+	if (photo.countryKnown()) 
+	    arguments.add(Integer.toString(photo.countryId()));
+	else
+	    arguments.add("");
         writers[FileNames.POST.ordinal()].writeEntry(arguments);
         arguments.clear();
 

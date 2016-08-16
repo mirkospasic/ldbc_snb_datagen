@@ -133,6 +133,7 @@ public class CSVPersonActivitySerializer extends PersonActivitySerializer {
         arguments.add("locationIP");
         arguments.add("browserUsed");
         arguments.add("content");
+	arguments.add("gifFile");
         arguments.add("length");
         writers[FileNames.COMMENT.ordinal()].writeEntry(arguments);
         arguments.clear();
@@ -147,10 +148,10 @@ public class CSVPersonActivitySerializer extends PersonActivitySerializer {
         writers[FileNames.COMMENT_HASTAG_TAG.ordinal()].writeEntry(arguments);
         arguments.clear();
 
-        arguments.add("Comment.id");
-        arguments.add("Place.id");
-        writers[FileNames.COMMENT_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
-        arguments.clear();
+	arguments.add("Comment.id");
+	arguments.add("Place.id");
+	writers[FileNames.COMMENT_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
+	arguments.clear();
 
         arguments.add("Comment.id");
         arguments.add("Post.id");
@@ -208,11 +209,13 @@ public class CSVPersonActivitySerializer extends PersonActivitySerializer {
 		arguments.add(Integer.toString(post.content().length()));
 		writers[FileNames.POST.ordinal()].writeEntry(arguments);
 		arguments.clear();
-		
-		arguments.add(Long.toString(post.messageId()));
-		arguments.add(Integer.toString(post.countryId()));
-		writers[FileNames.POST_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
-		arguments.clear();
+
+		if (post.countryKnown()) {
+		    arguments.add(Long.toString(post.messageId()));
+		    arguments.add(Integer.toString(post.countryId()));
+		    writers[FileNames.POST_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
+		    arguments.clear();
+		}
 		
 		arguments.add(Long.toString(post.messageId()));
 		arguments.add(Long.toString(post.author().accountId()));
@@ -239,6 +242,7 @@ public class CSVPersonActivitySerializer extends PersonActivitySerializer {
 		arguments.add(comment.ipAddress().toString());
 		arguments.add(Dictionaries.browsers.getName(comment.browserId()));
 		arguments.add(comment.content());
+		arguments.add(comment.gif());
 		arguments.add(Integer.toString(comment.content().length()));
 		writers[FileNames.COMMENT.ordinal()].writeEntry(arguments);
 		arguments.clear();
@@ -254,10 +258,13 @@ public class CSVPersonActivitySerializer extends PersonActivitySerializer {
 			writers[FileNames.COMMENT_REPLYOF_COMMENT.ordinal()].writeEntry(arguments);
 			arguments.clear();
 		}
-		arguments.add(Long.toString(comment.messageId()));
-		arguments.add(Integer.toString(comment.countryId()));
-		writers[FileNames.COMMENT_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
-		arguments.clear();
+
+		if (comment.countryKnown()) {
+		    arguments.add(Long.toString(comment.messageId()));
+		    arguments.add(Integer.toString(comment.countryId()));
+		    writers[FileNames.COMMENT_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
+		    arguments.clear();
+		}
 		
 		arguments.add(Long.toString(comment.messageId()));
 		arguments.add(Long.toString(comment.author().accountId()));
@@ -285,11 +292,12 @@ public class CSVPersonActivitySerializer extends PersonActivitySerializer {
 		writers[FileNames.POST.ordinal()].writeEntry(arguments);
 		arguments.clear();
 		
-		
-		arguments.add(Long.toString(photo.messageId()));
-		arguments.add(Integer.toString(photo.countryId()));
-		writers[FileNames.POST_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
-		arguments.clear();
+		if (photo.countryKnown()) {
+		    arguments.add(Long.toString(photo.messageId()));
+		    arguments.add(Integer.toString(photo.countryId()));
+		    writers[FileNames.POST_ISLOCATEDIN_PLACE.ordinal()].writeEntry(arguments);
+		    arguments.clear();
+		}
 		
 		arguments.add(Long.toString(photo.messageId()));
 		arguments.add(Long.toString(photo.author().accountId()));

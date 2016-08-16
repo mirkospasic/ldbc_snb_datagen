@@ -80,6 +80,8 @@ public class PhotoGenerator {
 			/*if( date <= Dictionaries.dates.getEndDateTime() )*/ {
 				long id = SN.formId(SN.composeId(nextId++,date));
 				photo_.initialize(id,date,album.moderator(), album.id(), "photo"+id+".jpg",tags,album.moderator().ipAddress(),album.moderator().browserId(),latt,longt);
+				if (randomFarm.get(RandomGeneratorFarm.Aspect.PHOTO_COUNTRY).nextDouble() > 0.06)
+				    photo_.countryKnown(false);
 				exporter.export(photo_);
 				if( randomFarm.get(RandomGeneratorFarm.Aspect.NUM_LIKE).nextDouble() <= 0.1 ) {
 					likeGenerator_.generateLikes(randomFarm.get(RandomGeneratorFarm.Aspect.NUM_LIKE), album, photo_, Like.LikeType.PHOTO, exporter);

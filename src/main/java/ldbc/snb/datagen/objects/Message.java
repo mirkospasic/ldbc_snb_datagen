@@ -53,6 +53,7 @@ abstract public class Message {
     private IP ipAddress_;
     private int browserId_;
     private int countryId_;
+    private boolean countryKnown_;
 
     public Message() {
         tags_ = new TreeSet<Integer>();
@@ -79,6 +80,7 @@ abstract public class Message {
         ipAddress_ = new IP(ipAddress);
         browserId_ = browserId;
         countryId_ = Dictionaries.ips.getLocation(ipAddress);
+	countryKnown_ = true;
     }
 
     public void initialize(long messageId,
@@ -100,6 +102,7 @@ abstract public class Message {
         ipAddress_.copy(ipAddress);
         browserId_ = browserId;
         countryId_ = Dictionaries.ips.getLocation(ipAddress);
+	countryKnown_ = true;
     }
 
     public long messageId() {
@@ -173,5 +176,13 @@ abstract public class Message {
 
     public void countryId ( int l ) {
 	    countryId_ = l;
+    }
+
+    public boolean countryKnown () {
+	    return countryKnown_;
+    }
+
+    public void countryKnown ( boolean l ) {
+	    countryKnown_ = l;
     }
 }

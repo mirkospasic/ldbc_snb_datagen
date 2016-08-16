@@ -86,6 +86,10 @@ public class SNVOC {
     public static final String content = PREFIX + "content";
     public static final String language = PREFIX + "language";
     public static final String hasImage = PREFIX + "imageFile";
+    public static final String hasGif = PREFIX + "gifFile";
+    public static final String hasMentioned = PREFIX + "mentions";
+    public static final String hasVisibility = PREFIX + "visible";
+    public static final String hasLink = PREFIX + "links";
     public static final String retweet = PREFIX + "retweet";
     public static final String replyOf = PREFIX + "replyOf";
     public static final String length = PREFIX + "length";

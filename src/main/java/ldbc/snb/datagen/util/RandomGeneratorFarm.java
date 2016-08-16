@@ -109,6 +109,11 @@ public class RandomGeneratorFarm {
         MEMBERSHIP_POST_CREATOR,
         REPLY_TO,
         TOPIC,
+	COMMENT_GIF,
+	COMMENT_ISGIF,
+	COMMENT_COUNTRY,
+	POST_COUNTRY,
+	PHOTO_COUNTRY,
         NUM_ASPECT                  // This must be always the last one.
     }
 
