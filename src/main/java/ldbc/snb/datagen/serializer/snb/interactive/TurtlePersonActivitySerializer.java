@@ -13,8 +13,12 @@ import ldbc.snb.datagen.serializer.Turtle;
 import ldbc.snb.datagen.vocabulary.*;
 import org.apache.hadoop.conf.Configuration;
 
+
 // TODO: DELETE THIS
 import java.util.Random;
+
+import java.text.SimpleDateFormat;
+
 
 /**
  *
@@ -25,6 +29,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 	private String empty="";
 	private long membershipId = 0;
 	private long likeId       = 0;
+	private SimpleDateFormat dateTimeFormat = null;
 
 	private enum FileNames {
 		SOCIAL_NETWORK ("social_network_activity");
@@ -45,6 +50,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 	@Override
 	public void initialize(Configuration conf, int reducerId) {
 
+		dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 		int numFiles = FileNames.values().length;
 		writers = new HDFSWriter[numFiles];
 		for( int i = 0; i < numFiles; ++i) {
@@ -75,7 +81,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 		Turtle.AddTriple(result, false, false, forumPrefix, SNVOC.title,
 				Turtle.createLiteral(forum.title()));
 		Turtle.AddTriple(result, false, true, forumPrefix, SNVOC.creationDate,
-				Turtle.createDataTypeLiteral(Dictionaries.dates.formatDateTime(forum.creationDate()), XSD.DateTime));
+				Turtle.createDataTypeLiteral(dateTimeFormat.format(forum.creationDate()), XSD.DateTime));
 
 		Turtle.createTripleSPO(result, forumPrefix,
 				SNVOC.hasModerator, SN.getPersonURI(forum.moderator().accountId()));
@@ -99,7 +105,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 				Turtle.createDataTypeLiteral(Long.toString(post.messageId()), XSD.Long));
 
 		Turtle.AddTriple(result, false, false, prefix, SNVOC.creationDate,
-				Turtle.createDataTypeLiteral(Dictionaries.dates.formatDateTime(post.creationDate()), XSD.DateTime));
+				Turtle.createDataTypeLiteral(dateTimeFormat.format(post.creationDate()), XSD.DateTime));
 
 		Turtle.AddTriple(result, false, false, prefix, SNVOC.ipaddress,
 					Turtle.createLiteral(post.ipAddress().toString()));
@@ -152,7 +158,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 				Turtle.createDataTypeLiteral(Long.toString(comment.messageId()), XSD.Long));
 
 		Turtle.AddTriple(result, false, false, prefix, SNVOC.creationDate,
-				Turtle.createDataTypeLiteral(Dictionaries.dates.formatDateTime(comment.creationDate()), XSD.DateTime));
+				Turtle.createDataTypeLiteral(dateTimeFormat.format(comment.creationDate()), XSD.DateTime));
 		Turtle.AddTriple(result, false, false, prefix, SNVOC.ipaddress,
 				Turtle.createLiteral(comment.ipAddress().toString()));
 		Turtle.AddTriple(result, false, false, prefix, SNVOC.browser,
@@ -213,7 +219,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 		Turtle.AddTriple(result, false, false, prefix, SNVOC.browser,
 				Turtle.createLiteral(Dictionaries.browsers.getName(photo.browserId())));
 		Turtle.AddTriple(result, false, true, prefix, SNVOC.creationDate,
-				Turtle.createDataTypeLiteral(Dictionaries.dates.formatDateTime(photo.creationDate()), XSD.DateTime));
+				Turtle.createDataTypeLiteral(dateTimeFormat.format(photo.creationDate()), XSD.DateTime));
 
 		Turtle.createTripleSPO(result, prefix, SNVOC.hasCreator, SN.getPersonURI(photo.author().accountId()));
 		Turtle.createTripleSPO(result, SN.getForumURI(photo.forumId()), SNVOC.containerOf, prefix);
@@ -246,7 +252,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 
 		Turtle.AddTriple(result, true, false, memberhipPrefix, SNVOC.hasPerson, SN.getPersonURI(membership.person().accountId()));
 		Turtle.AddTriple(result, false, true, memberhipPrefix, SNVOC.joinDate,
-				Turtle.createDataTypeLiteral(Dictionaries.dates.formatDateTime(membership.creationDate()), XSD.DateTime));
+				Turtle.createDataTypeLiteral(dateTimeFormat.format(membership.creationDate()), XSD.DateTime));
 		membershipId++;
 		writers[FileNames.SOCIAL_NETWORK.ordinal()].write(result.toString());
 	}
@@ -266,7 +272,7 @@ public class TurtlePersonActivitySerializer extends PersonActivitySerializer {
 			Turtle.AddTriple(result, true, false, likePrefix, SNVOC.hasComment, prefix);
 		}
 		Turtle.AddTriple(result, false, true, likePrefix, SNVOC.creationDate,
-				Turtle.createDataTypeLiteral(Dictionaries.dates.formatDateTime(like.date), XSD.DateTime));
+				Turtle.createDataTypeLiteral(dateTimeFormat.format(like.date), XSD.DateTime));
 		likeId++;
 		writers[FileNames.SOCIAL_NETWORK.ordinal()].write(result.toString());
 	}
